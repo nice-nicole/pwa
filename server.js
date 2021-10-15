@@ -1,1 +1,3 @@
-console.log('The first app')
+let http = require('http')
+let server = http.createServer()
+server.listen(7777)
