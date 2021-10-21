@@ -1,15 +1,23 @@
 {
   "name": "pwa2021",
   "version": "1.0.0",
-  "description": "Programming Web Application, winter semester of 2021/22",
+  "description": "",
   "main": "server.js",
+  "dependencies": {
+    "node-static": "^0.7.11"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
+<<<<<<< HEAD
     "url": "https://gitlab.com/mariusz.jarocki/pwa2021.git"
+=======
+    "url": "git+ssh://git@gitlab.com/mariusz.jarocki/pwa2021.git"
+>>>>>>> origin/lecture
   },
   "author": "",
   "license": "ISC",
