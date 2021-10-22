@@ -21,6 +21,15 @@ httpServer.on('request', function(req, res) {
                     res.write(JSON.stringify(data))
                     res.end()
                     break
+                case 'POST':
+                    req.on('data', function(data) {
+                        console.log(data)
+                    }).on('end', function() {
+                        res.writeHead(200, 'OK', {'Content-type': 'application/json'})
+                        res.write(JSON.stringify(data))
+                        res.end()    
+                    })
+                    break
                 default:
                     res.writeHead(405, 'Method not allowed', {'Content-type': 'application/json'})
                     res.end()
