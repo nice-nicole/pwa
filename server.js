@@ -22,9 +22,13 @@ httpServer.on('request', function(req, res) {
                     res.end()
                     break
                 case 'POST':
+                    let payload = ''
                     req.on('data', function(data) {
-                        console.log(data)
+                        payload += data
                     }).on('end', function() {
+                        payload = JSON.parse(payload)
+                        data.push(payload)
+                        console.log('PAYLOAD', payload)
                         res.writeHead(200, 'OK', {'Content-type': 'application/json'})
                         res.write(JSON.stringify(data))
                         res.end()    
