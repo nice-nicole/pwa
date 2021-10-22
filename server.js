@@ -20,11 +20,12 @@ httpServer.on('request', function(req, res) {
                     res.writeHead(200, 'OK', {'Content-type': 'application/json'})
                     res.write(JSON.stringify(data))
                     res.end()
+                    break
                 default:
                     res.writeHead(405, 'Method not allowed', {'Content-type': 'application/json'})
                     res.end()
-                }
-
+            }
+            break
         default:
             fileServer.serve(req, res)
     }
