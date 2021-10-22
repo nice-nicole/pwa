@@ -26,12 +26,17 @@ httpServer.on('request', function(req, res) {
                     req.on('data', function(data) {
                         payload += data
                     }).on('end', function() {
-                        payload = JSON.parse(payload)
-                        data.push(payload)
-                        console.log('PAYLOAD', payload)
-                        res.writeHead(200, 'OK', {'Content-type': 'application/json'})
-                        res.write(JSON.stringify(data))
-                        res.end()    
+                        try {
+                            payload = JSON.parse(payload)
+                            data.push(payload)
+                            console.log('PAYLOAD', payload)
+                            res.writeHead(200, 'OK', {'Content-type': 'application/json'})
+                            res.write(JSON.stringify(data))
+                            res.end()    
+                        } catch(ex) {
+                            res.writeHead(400, 'Data corrupted', {'Content-type': 'application/json'})
+                            res.end()            
+                        }
                     })
                     break
                 default:
