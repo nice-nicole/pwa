@@ -1,17 +1,31 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="pwa2021">
   <head>
     <meta charset="utf-8">
     <title>pwa2021</title>
     <link rel="stylesheet" href="node_modules/bootstrap3/dist/css/bootstrap.min.css">
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
   </head>
 
   <body>
-      <div class="container">
+      <div class="container" ng-controller="Ctrl as ctrl">
         <img src="images/wmii.png">
         <h1>pwa2021 - the first page</h1>
         <a class="btn btn-primary" href="second.html">The second page</a>
+
+        <hr/>
+        <h2><span class="label label-success" ng-bind="ctrl.person.firstName + ' ' + ctrl.person.lastName + ' ' + ctrl.person.year"></span></h2>
+
+        <form class="form form-inline">
+          <input type="text" placeholder="first name" ng-model="ctrl.person.firstName"/>
+          <input type="text" placeholder="last name" ng-model="ctrl.person.lastName"/>
+          <input type="number" placeholder="year" ng-model="ctrl.person.year"/>
+          <button class="btn btn-default" ng-click="ctrl.send()">Send</button>
+        </form>
       </div>
-  </body>
+
+      <script src="node_modules/angular/angular.min.js"></script>
+      <script src="js/app.js"></script>
+    </body>
 </html>
