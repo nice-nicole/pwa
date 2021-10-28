@@ -32,10 +32,10 @@ httpServer.on('request', function(req, res) {
                             console.log('PAYLOAD', payload)
                             res.writeHead(200, 'OK', {'Content-type': 'application/json'})
                             res.write(JSON.stringify(data))
-                            res.end()
+                            res.end()    
                         } catch(ex) {
-                            res.writeHead(400, 'Wrong data', {'Content-type': 'application/json'})
-                            res.end()        
+                            res.writeHead(400, 'Data corrupted', {'Content-type': 'application/json'})
+                            res.end()            
                         }
                     })
                     break
@@ -44,7 +44,6 @@ httpServer.on('request', function(req, res) {
                     res.end()
             }
             break
-
         default:
             fileServer.serve(req, res)
     }
