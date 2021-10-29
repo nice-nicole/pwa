@@ -1,4 +1,5 @@
 let http = require('http')
+let url = require('url')
 
 let nodestatic = require('node-static')
 
@@ -11,8 +12,10 @@ let data = [
 ]
 
 httpServer.on('request', function(req, res) {
-    console.log(req.method, req.url)
-    switch(req.url) {
+    let urlParsed = url.parse(req.url, true)
+    urlParsed.query = urlParsed.query ? urlParsed.query : {}
+    console.log(req.method, urlParsed.pathname, urlParsed.query)
+    switch(urlParsed.pathname) {
 
         case '/data':
             switch(req.method) {
@@ -39,7 +42,14 @@ httpServer.on('request', function(req, res) {
                         }
                     })
                     break
-                default:
+                case 'DELETE':
+                    let n = 0 + urlParsed.query.n
+                    data.splice(n, 1)
+                    res.writeHead(200, 'OK', {'Content-type': 'application/json'})
+                    res.write(JSON.stringify(data))
+                    res.end()
+                    break    
+               default:
                     res.writeHead(405, 'Method not allowed', {'Content-type': 'application/json'})
                     res.end()
             }
