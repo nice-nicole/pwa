@@ -19,11 +19,15 @@
             <th>First name</th>
             <th>Last name</th>
             <th>Year of birth</th>
+            <th></th>
           </tr>        
           <tr ng-repeat="person in ctrl.persons">
             <td ng-bind="person.firstName"></td>
             <td ng-bind="person.lastName"></td>
             <td ng-bind="person.year"></td>
+            <td>
+              <button class="btn btn-danger btn-xs" ng-click="ctrl.delete($index)">del</button>
+            </td>
           </tr>
         </table>
 

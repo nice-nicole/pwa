@@ -13,8 +13,15 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.send = function() {
-        // console.log(ctrl.person)
         $http.post('/data', ctrl.person).then(function(res) {
+            ctrl.persons = res.data
+        }, function(err) {
+            console.error(err.data)
+        })
+    }
+
+    ctrl.delete = function(n) {
+        $http.delete('/data?n=' + n).then(function(res) {
             ctrl.persons = res.data
         }, function(err) {
             console.error(err.data)
