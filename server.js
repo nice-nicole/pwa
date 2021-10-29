@@ -43,7 +43,12 @@ httpServer.on('request', function(req, res) {
                     })
                     break
                 case 'DELETE':
-                    let n = 0 + urlParsed.query.n
+                    let n = parseInt(urlParsed.query.n)
+                    if(isNaN(n) || n < 0 || n >= data.length) {
+                        res.writeHead(400, 'Bad index', {'Content-type': 'application/json'})
+                        res.end()            
+                        break
+                    }
                     data.splice(n, 1)
                     res.writeHead(200, 'OK', {'Content-type': 'application/json'})
                     res.write(JSON.stringify(data))
