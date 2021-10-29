@@ -14,7 +14,19 @@
         <h1>pwa2021 - the first page</h1>
         <a class="btn btn-primary" href="second.html">The second page</a>
 
-        <hr/>
+        <table class="table table-stripped">
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Year of birth</th>
+          </tr>        
+          <tr ng-repeat="person in ctrl.persons">
+            <td ng-bind="person.firstName"></td>
+            <td ng-bind="person.lastName"></td>
+            <td ng-bind="person.year"></td>
+          </tr>
+        </table>
+
         <h2><span class="label label-success" ng-bind="ctrl.person.firstName + ' ' + ctrl.person.lastName + ' ' + ctrl.person.year"></span></h2>
 
         <form class="form form-inline">

@@ -4,6 +4,8 @@ app.controller('Ctrl', [ '$http', function($http) {
     console.log('Ctrl started')
     let ctrl = this
 
+    ctrl.persons = []
+
     ctrl.person = {
         firstName: '',
         lastName: '',
@@ -13,9 +15,15 @@ app.controller('Ctrl', [ '$http', function($http) {
     ctrl.send = function() {
         // console.log(ctrl.person)
         $http.post('/data', ctrl.person).then(function(res) {
-            console.log(res.data)
+            ctrl.persons = res.data
         }, function(err) {
             console.error(err.data)
         })
     }
+
+    $http.get('/data').then(function(res) {
+        ctrl.persons = res.data
+    }, function(err) {
+        console.error(err.data)
+    })
 }])
