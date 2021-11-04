@@ -27,6 +27,7 @@
             <td ng-bind="person.year"></td>
             <td>
               <button class="btn btn-danger btn-xs" ng-click="ctrl.delete($index)">del</button>
+              <button class="btn btn-primary btn-xs" ng-click="ctrl.copy($index)">copy</button>
             </td>
           </tr>
         </table>
@@ -37,7 +38,8 @@
           <input type="text" placeholder="first name" ng-model="ctrl.person.firstName"/>
           <input type="text" placeholder="last name" ng-model="ctrl.person.lastName"/>
           <input type="number" placeholder="year" ng-model="ctrl.person.year"/>
-          <button class="btn btn-default" ng-click="ctrl.send()">Send</button>
+          <button class="btn btn-default" ng-click="ctrl.send()">New</button>
+          <button class="btn btn-default" ng-click="ctrl.modify()">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
         </form>
       </div>
 

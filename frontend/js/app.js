@@ -4,6 +4,8 @@ app.controller('Ctrl', [ '$http', function($http) {
     console.log('Ctrl started')
     let ctrl = this
 
+    ctrl.clickedRow = 0
+
     ctrl.persons = []
 
     ctrl.person = {
@@ -13,7 +15,15 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.send = function() {
-        $http.post('/data', ctrl.person).then(function(res) {
+        $http.post('/person', ctrl.person).then(function(res) {
+            ctrl.persons = res.data
+        }, function(err) {
+            console.error(err.data)
+        })
+    }
+
+    ctrl.modify = function() {
+        $http.put('/person?n=' + ctrl.clickedRow, ctrl.person).then(function(res) {
             ctrl.persons = res.data
         }, function(err) {
             console.error(err.data)
@@ -21,14 +31,21 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.delete = function(n) {
-        $http.delete('/data?n=' + n).then(function(res) {
+        $http.delete('/person?n=' + n).then(function(res) {
             ctrl.persons = res.data
         }, function(err) {
             console.error(err.data)
         })
     }
 
-    $http.get('/data').then(function(res) {
+    ctrl.copy = function(n) {
+        ctrl.person.firstName = ctrl.persons[n].firstName
+        ctrl.person.lastName = ctrl.persons[n].lastName
+        ctrl.person.year = ctrl.persons[n].year
+        ctrl.clickedRow = n
+    }
+
+    $http.get('/person').then(function(res) {
         ctrl.persons = res.data
     }, function(err) {
         console.error(err.data)
