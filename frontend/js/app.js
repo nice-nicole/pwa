@@ -4,7 +4,7 @@ app.controller('Ctrl', [ '$http', function($http) {
     console.log('Ctrl started')
     let ctrl = this
 
-    ctrl.clickedRow = 0
+    ctrl.clickedRow = -1
 
     ctrl.persons = []
 
@@ -33,6 +33,7 @@ app.controller('Ctrl', [ '$http', function($http) {
     ctrl.delete = function(n) {
         $http.delete('/person?n=' + n).then(function(res) {
             ctrl.persons = res.data
+            if(ctrl.clickedRow == n) ctrl.clickedRow = -1
         }, function(err) {
             console.error(err.data)
         })

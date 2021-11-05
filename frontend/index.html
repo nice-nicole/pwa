@@ -16,12 +16,14 @@
 
         <table class="table table-stripped">
           <tr>
+            <th>#</th>
             <th>First name</th>
             <th>Last name</th>
             <th>Year of birth</th>
             <th></th>
           </tr>        
           <tr ng-repeat="person in ctrl.persons">
+            <td><span class="badge" ng-bind="$index"></span></td>
             <td ng-bind="person.firstName"></td>
             <td ng-bind="person.lastName"></td>
             <td ng-bind="person.year"></td>
@@ -39,7 +41,7 @@
           <input type="text" placeholder="last name" ng-model="ctrl.person.lastName"/>
           <input type="number" placeholder="year" ng-model="ctrl.person.year"/>
           <button class="btn btn-default" ng-click="ctrl.send()">New</button>
-          <button class="btn btn-default" ng-click="ctrl.modify()">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
+          <button class="btn btn-default" ng-click="ctrl.modify()" ng-if="ctrl.clickedRow >= 0">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
         </form>
       </div>
 
