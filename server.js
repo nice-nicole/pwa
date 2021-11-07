@@ -6,7 +6,9 @@ let url = require('url')
 let nodestatic = require('node-static')
 
 // own modules
+let lib = require('./lib')
 let person = require('./person')
+let balance = require('./balance')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
@@ -14,28 +16,30 @@ let fileServer = new nodestatic.Server('./frontend')
 httpServer.on('request', function(req, res) {
 
     // prepare object to pass to handling methods
-    let env = { req: req, res: res }
+    let env = { req, res }
 
     // parse url
     env.urlParsed = url.parse(req.url, true)
-    env.urlParsed.query = env.urlParsed.query ? env.urlParsed.query : {}
 
     // parse payload
     env.payload = ''
     req.on('data', function(data) {
         env.payload += data
     }).on('end', function() {
-        try {           
+        try {
+            // empty payload should result in {}
             env.payload = env.payload ? JSON.parse(env.payload) : {}
         } catch(ex) {
-            res.writeHead(400, 'JSON broken', {'Content-type': 'application/json'})
-            res.end()            
+            lib.sendError(res, 400, ex.message)
             return
         }
-        console.log(req.method, env.urlParsed.pathname, env.urlParsed.query, env.payload)
+        console.log(req.method, env.urlParsed.pathname, JSON.stringify(env.urlParsed.query), JSON.stringify(env.payload))
         switch(env.urlParsed.pathname) {
             case '/person':
                 person.handle(env)
+                break
+            case '/balance':
+                balance.handle(env)
                 break
             default:
                 fileServer.serve(req, res)

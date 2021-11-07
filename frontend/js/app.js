@@ -14,7 +14,10 @@ app.controller('Ctrl', [ '$http', function($http) {
         year: 2000
     }
 
-    ctrl.send = function() {
+    ctrl.amount = 0
+    ctrl.from = ctrl.to = '0'
+
+    ctrl.new = function() {
         $http.post('/person', ctrl.person).then(function(res) {
             ctrl.persons = res.data
         }, function(err) {
@@ -46,6 +49,31 @@ app.controller('Ctrl', [ '$http', function($http) {
         ctrl.clickedRow = n
     }
 
+    ctrl.deposit_on_all = function() {
+        $http.post('/balance', { amount: ctrl.amount }).then(function(res) {
+            ctrl.persons = res.data
+        }, function(err) {
+            console.error(err.data)
+        })
+    }
+
+    ctrl.deposit_on_all = function() {
+        $http.post('/balance', { amount: ctrl.amount }).then(function(res) {
+            ctrl.persons = res.data
+        }, function(err) {
+            console.error(err.data)
+        })
+    }
+
+    ctrl.transfer = function() {
+        $http.put('/balance', { from: ctrl.from, to: ctrl.to, amount: ctrl.amount }).then(function(res) {
+            ctrl.persons = res.data
+        }, function(err) {
+            console.error(err.data)
+        })
+    }
+
+    // retrieve persons list on start
     $http.get('/person').then(function(res) {
         ctrl.persons = res.data
     }, function(err) {
