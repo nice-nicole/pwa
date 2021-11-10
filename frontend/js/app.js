@@ -73,6 +73,20 @@ app.controller('Ctrl', [ '$http', function($http) {
         })
     }
 
+    ctrl.isTransferAvailable = function() {
+        if(!ctrl.persons || !ctrl.persons[parseInt(ctrl.from)] || ctrl.from == ctrl.to || ctrl.amount <= 0) return false
+        let balance = ctrl.persons[parseInt(ctrl.from)].balance
+        return balance >= ctrl.amount
+    }
+
+    ctrl.isDepositAvailable = function() {
+        return ctrl.amount > 0
+    }
+
+    ctrl.isPersonDataCorrect = function() {
+        return ctrl.person.firstName && ctrl.person.lastName && ctrl.person.year >= 1900
+    }
+
     // retrieve persons list on start
     $http.get('/person').then(function(res) {
         ctrl.persons = res.data

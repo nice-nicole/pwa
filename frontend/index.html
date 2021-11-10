@@ -41,14 +41,14 @@
           <input class="form-control" type="text" placeholder="first name" ng-model="ctrl.person.firstName"/>
           <input class="form-control" type="text" placeholder="last name" ng-model="ctrl.person.lastName"/>
           <input class="form-control" type="number" placeholder="year" ng-model="ctrl.person.year"/>
-          <button class="btn btn-default" ng-click="ctrl.new()">New</button>
-          <button class="btn btn-default" ng-click="ctrl.modify()" ng-if="ctrl.clickedRow >= 0">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
+          <button class="btn btn-default" ng-click="ctrl.new()" ng-disabled="!ctrl.isPersonDataCorrect()">New</button>
+          <button class="btn btn-default" ng-click="ctrl.modify()" ng-if="ctrl.clickedRow >= 0" ng-disabled="!ctrl.isPersonDataCorrect()">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
         </form><br/>
 
         <label for="deposit_on_all">Deposit on all accounts</label>
         <form id="deposit_on_all" class="form form-inline">
           <input class="form-control" type="number" placeholder="amount" ng-model="ctrl.amount"/>
-          <button class="btn btn-default" ng-click="ctrl.deposit_on_all()">Submit</button>
+          <button class="btn btn-default" ng-click="ctrl.deposit_on_all()" ng-disabled="!ctrl.isDepositAvailable()">Submit</button>
         </form><br/>
 
         <label for="transfer">Transfer from one account to another</label>
@@ -60,7 +60,7 @@
             <option ng-repeat="person in ctrl.persons" value="{{$index}}" ng-bind="person.firstName+' '+person.lastName"></option>
           </select>
           <input class="form-control" type="number" placeholder="amount" ng-model="ctrl.amount"/>
-          <button class="btn btn-default" ng-click="ctrl.transfer()">Submit</button>
+          <button class="btn btn-default" ng-click="ctrl.transfer()" ng-disabled="!ctrl.isTransferAvailable()">Submit</button>
         </form><br/>
 
       </div>
