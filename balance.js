@@ -7,18 +7,19 @@ const balance = module.exports = {
         return !isNaN(amount) && amount > 0 
     },
 
+    validateTransfer: function(transfer) {
+        transfer.from = parseInt(transfer.from)
+        transfer.to = parseInt(transfer.to)
+        return !isNaN(transfer.from) && transfer.from >= 0 && transfer.from < person.data.length &&
+               !isNaN(transfer.to) && transfer.to >= 0 && transfer.to < person.data.length &&
+               transfer.to != transfer.from &&
+               balance.validateAmount(transfer.amount) &&
+               person.data[transfer.from].balance >= transfer.amount
+    },
+
     handle: function(env) {
         let from = -1, to = -1
         if(env.req.method == 'PUT') {
-            from = parseInt(env.payload.from)
-            to = parseInt(env.payload.to)
-            if(isNaN(from) || from < 0 || from >= person.data.length ||
-               isNaN(to) || to < 0 || to >= person.data.length || to == from ||
-               balance.validateAmount(env.payload.amount) ||
-               person.data[from].balance < env.payload.amount) {
-                lib.sendError(env.res, 400, 'Bad indices (' + from + ',' + to + ') or not enough money')
-                return
-            }
         }
         switch(env.req.method) {
             case 'POST':
@@ -27,14 +28,19 @@ const balance = module.exports = {
                     person.data.forEach(function(obj) { obj.balance += env.payload.amount })
                     lib.sendJson(env.res, person.data)
                 } else {
-                    lib.sendError(env.res, 400, 'Bad amount')
+                    lib.sendError(env.res, 400, 'Wrong amount')
                 }
                 break
             case 'PUT':
                 // transfer the amount from one account to another
-                person.data[from].balance -= env.payload.amount
-                person.data[to].balance += env.payload.amount
-                lib.sendJson(env.res, person.data)
+                let transfer = { from: env.payload.from, to: env.payload.to, amount: env.payload.amount }
+                if(balance.validateTransfer(transfer)) {
+                    person.data[transfer.from].balance -= transfer.amount
+                    person.data[transfer.to].balance += transfer.amount
+                    lib.sendJson(env.res, person.data)   
+                } else {
+                    lib.sendError(env.res, 400, 'Wrong from, to or amount')
+                }
                 break        
            default:
                 lib.sendError(env.res, 405, 'Method not implemented')
