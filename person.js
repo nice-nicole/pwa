@@ -3,10 +3,8 @@ const db = require('./db')
 
 const person = module.exports = {
 
-    data: /* [
-        { firstName: 'Mariusz', lastName: 'Jarocki', year: 1969, balance: 100 },
-        { firstName: 'John', lastName: 'Doe', year: 2000, balance: 20 }
-    ] */ [],
+    // temporarily
+    data: [],
     
     validate: function(person) {
         let personFixed = { firstName: person.firstName, lastName: person.lastName, year: person.year }
@@ -17,6 +15,15 @@ const person = module.exports = {
         }
     },
 
+    sendData: function(res) {
+        db.persons.find().toArray(function(err, data) {
+            if(!err) 
+                lib.sendJson(res, data)
+            else
+                lib.sendError(res, 400, err.message)
+        })    
+    },
+
     handle: function(env) {
         let n = parseInt(env.urlParsed.query.n)
         if((env.req.method == 'PUT' || env.req.method == 'DELETE') && isNaN(n) || n < 0 || n >= person.data.length) {
@@ -25,9 +32,7 @@ const person = module.exports = {
         }
         switch(env.req.method) {
             case 'GET':
-                db.persons.find().toArray(function(err, data) {
-                    lib.sendJson(env.res, data)
-                })    
+                person.sendData(env.res)
                 break
             case 'POST':
                 let newPerson = person.validate(env.payload)

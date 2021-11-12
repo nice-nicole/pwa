@@ -18,9 +18,6 @@ const balance = module.exports = {
     },
 
     handle: function(env) {
-        let from = -1, to = -1
-        if(env.req.method == 'PUT') {
-        }
         switch(env.req.method) {
             case 'POST':
                 // deposit/withdraw the amount on/from all accounts
