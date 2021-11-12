@@ -9,6 +9,7 @@ let nodestatic = require('node-static')
 let lib = require('./lib')
 let person = require('./person')
 let balance = require('./balance')
+let db = require('./db')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
@@ -47,4 +48,6 @@ httpServer.on('request', function(req, res) {
     }) 
 })
 
-httpServer.listen(7777)
+db.init(function() {
+    httpServer.listen(7777)
+})

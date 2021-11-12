@@ -2,10 +2,10 @@ const lib = require('./lib')
 
 const person = module.exports = {
 
-    data: [
+    data: /* [
         { firstName: 'Mariusz', lastName: 'Jarocki', year: 1969, balance: 100 },
         { firstName: 'John', lastName: 'Doe', year: 2000, balance: 20 }
-    ],
+    ] */ [],
     
     validate: function(person) {
         let personFixed = { firstName: person.firstName, lastName: person.lastName, year: person.year }
