@@ -1,4 +1,5 @@
 const lib = require('./lib')
+const db = require('./db')
 
 const person = module.exports = {
 
@@ -24,7 +25,9 @@ const person = module.exports = {
         }
         switch(env.req.method) {
             case 'GET':
-                lib.sendJson(env.res, person.data)
+                db.persons.find().toArray(function(err, data) {
+                    lib.sendJson(env.res, data)
+                })    
                 break
             case 'POST':
                 let newPerson = person.validate(env.payload)

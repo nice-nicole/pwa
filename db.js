@@ -21,9 +21,6 @@ const db = module.exports = {
             }
             let conn = connection.db('pwa2021')
             db.persons = conn.collection('persons')
-            db.persons.find().toArray(function(err, data) {
-                person.data = data
-            })
             nextTick()
         })
     }
