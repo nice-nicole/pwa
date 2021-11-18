@@ -26,17 +26,17 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.modify = function() {
-        $http.put('/person?n=' + ctrl.clickedRow, ctrl.person).then(function(res) {
+        let _id = ctrl.persons[ctrl.clickedRow]._id
+        $http.put('/person?_id=' + _id, ctrl.person).then(function(res) {
             ctrl.persons = res.data
         }, function(err) {
             console.error(err.data)
         })
     }
 
-    ctrl.delete = function(n) {
-        $http.delete('/person?n=' + n).then(function(res) {
+    ctrl.delete = function(_id) {
+        $http.delete('/person?_id=' + _id).then(function(res) {
             ctrl.persons = res.data
-            if(ctrl.clickedRow == n) ctrl.clickedRow = -1
         }, function(err) {
             console.error(err.data)
         })
@@ -84,7 +84,7 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.isPersonDataCorrect = function() {
-        return ctrl.person.firstName && ctrl.person.lastName && ctrl.person.year >= 1900
+        return ctrl.person.firstName && ctrl.person.lastName && ctrl.person.year >= 1500
     }
 
     // retrieve persons list on start

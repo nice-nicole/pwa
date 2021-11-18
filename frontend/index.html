@@ -30,7 +30,7 @@
             <td ng-bind="person.year"></td>
             <td ng-bind="person.balance"></td>
             <td>
-              <button class="btn btn-danger btn-xs" ng-click="ctrl.delete($index)">del</button>
+              <button class="btn btn-danger btn-xs" ng-click="ctrl.delete(person._id)">del</button>
               <button class="btn btn-primary btn-xs" ng-click="ctrl.copy($index)">copy</button>
             </td>
           </tr>

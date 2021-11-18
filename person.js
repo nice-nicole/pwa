@@ -2,13 +2,10 @@ const lib = require('./lib')
 const db = require('./db')
 
 const person = module.exports = {
-
-    // temporarily
-    data: [],
-    
+  
     validate: function(person) {
         let personFixed = { firstName: person.firstName, lastName: person.lastName, year: person.year }
-        if(personFixed.firstName && personFixed.lastName && personFixed.year >= 1900) {
+        if(personFixed.firstName && personFixed.lastName && personFixed.year >= 1500) {
             return personFixed
         } else {
             return null
@@ -25,11 +22,7 @@ const person = module.exports = {
     },
 
     handle: function(env) {
-        let n = parseInt(env.urlParsed.query.n)
-        if((env.req.method == 'PUT' || env.req.method == 'DELETE') && isNaN(n) || n < 0 || n >= person.data.length) {
-            lib.sendError(env.res, 400, 'Bad index (' + n + ')')
-            return
-        }
+        let _id = db.ObjectId(env.urlParsed.query._id)
         switch(env.req.method) {
             case 'GET':
                 person.sendData(env.res)
@@ -38,26 +31,39 @@ const person = module.exports = {
                 let newPerson = person.validate(env.payload)
                 if(newPerson) {
                     newPerson.balance = 0
-                    person.data.push(newPerson)
-                    lib.sendJson(env.res, person.data)    
+                    db.persons.insertOne(newPerson, function(err, res) {
+                        if(!err) {
+                            person.sendData(env.res)
+                        } else {
+                            lib.sendError(env.res, 400, 'Creating new object failed')
+                        }
+                    })
                 } else {
                     lib.sendError(env.res, 400, 'Person data is invalid')
                 }
                 break
             case 'PUT':
-                let prevBalance = person.data[n].balance
                 let modifiedPerson = person.validate(env.payload)
                 if(modifiedPerson) {
-                    person.data[n] = modifiedPerson
-                    person.data[n].balance = prevBalance
-                    lib.sendJson(env.res, person.data)
+                    db.persons.findOneAndUpdate({ _id: _id }, { $set: modifiedPerson }, function(err, res) {
+                        if(!err) {
+                            person.sendData(env.res)
+                        } else {
+                            lib.sendError(env.res, 400, 'Updating object ' + _id + ' failed')
+                        }
+                    })
                 } else {
                     lib.sendError(env.res, 400, 'Person data is invalid')
                 }
                 break        
             case 'DELETE':
-                person.data.splice(n, 1)
-                lib.sendJson(env.res, person.data)
+                db.persons.findOneAndDelete({ _id: _id }, function(err, res) {
+                    if(!err) {
+                        person.sendData(env.res)
+                    } else {
+                        lib.sendError(env.res, 400, 'Deleting object ' + _id + ' failed')
+                    }
+                })
                 break    
            default:
                 lib.sendError(env.res, 405, 'Method not implemented')
