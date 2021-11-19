@@ -35,11 +35,11 @@ const balance = module.exports = {
                 // transfer the amount from one account to another
                 let transfer = { from: env.payload.from, to: env.payload.to, amount: env.payload.amount }
                 if(balance.validateTransfer(transfer)) {
-                    //
-                    // HOMEWORK: write a code which decrement "from" account by the amount and
-                    //           increment "to" account (use findOneAndUpdate twice)
-                    //
-                    person.sendData(env.res)
+                    db.persons.findOneAndUpdate({ _id: transfer.from }, { $inc: { balance: -transfer.amount } }, function(err, res) {
+                        db.persons.findOneAndUpdate({ _id: transfer.to }, { $inc: { balance: transfer.amount } }, function(err, res) {
+                            person.sendData(env.res)
+                        })    
+                    })
                 } else {
                     lib.sendError(env.res, 400, 'Wrong from, to or amount')
                 }
