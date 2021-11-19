@@ -1,3 +1,5 @@
+const { CommandStartedEvent } = require('mongodb')
+const db = require('./db')
 const lib = require('./lib')
 const person = require('./person')
 
@@ -8,13 +10,9 @@ const balance = module.exports = {
     },
 
     validateTransfer: function(transfer) {
-        transfer.from = parseInt(transfer.from)
-        transfer.to = parseInt(transfer.to)
-        return !isNaN(transfer.from) && transfer.from >= 0 && transfer.from < person.data.length &&
-               !isNaN(transfer.to) && transfer.to >= 0 && transfer.to < person.data.length &&
-               transfer.to != transfer.from &&
-               balance.validateAmount(transfer.amount) &&
-               person.data[transfer.from].balance >= transfer.amount
+        transfer.from = db.ObjectId(transfer.from)
+        transfer.to = db.ObjectId(transfer.to)
+        return transfer.from && transfer.to && balance.validateAmount(transfer.amount)
     },
 
     handle: function(env) {
@@ -22,8 +20,13 @@ const balance = module.exports = {
             case 'POST':
                 // deposit/withdraw the amount on/from all accounts
                 if(balance.validateAmount(env.payload.amount)) {
-                    person.data.forEach(function(obj) { obj.balance += env.payload.amount })
-                    lib.sendJson(env.res, person.data)
+                    // person.data.forEach(function(obj) { obj.balance += env.payload.amount })
+                    db.persons.updateMany({}, { $inc: { balance: env.payload.amount } }, function(err, result) {
+                        if(!err)
+                            person.sendData(env.res)
+                        else   
+                            lib.sendError(env.res, 400, 'Update records failed')
+                    })
                 } else {
                     lib.sendError(env.res, 400, 'Wrong amount')
                 }
@@ -32,9 +35,11 @@ const balance = module.exports = {
                 // transfer the amount from one account to another
                 let transfer = { from: env.payload.from, to: env.payload.to, amount: env.payload.amount }
                 if(balance.validateTransfer(transfer)) {
-                    person.data[transfer.from].balance -= transfer.amount
-                    person.data[transfer.to].balance += transfer.amount
-                    lib.sendJson(env.res, person.data)   
+                    //
+                    // HOMEWORK: write a code which decrement "from" account by the amount and
+                    //           increment "to" account (use findOneAndUpdate twice)
+                    //
+                    person.sendData(env.res)
                 } else {
                     lib.sendError(env.res, 400, 'Wrong from, to or amount')
                 }

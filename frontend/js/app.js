@@ -15,7 +15,7 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.amount = 0
-    ctrl.from = ctrl.to = '0'
+    ctrl.from = ctrl.to = null
 
     ctrl.new = function() {
         $http.post('/person', ctrl.person).then(function(res) {
@@ -57,14 +57,6 @@ app.controller('Ctrl', [ '$http', function($http) {
         })
     }
 
-    ctrl.deposit_on_all = function() {
-        $http.post('/balance', { amount: ctrl.amount }).then(function(res) {
-            ctrl.persons = res.data
-        }, function(err) {
-            console.error(err.data)
-        })
-    }
-
     ctrl.transfer = function() {
         $http.put('/balance', { from: ctrl.from, to: ctrl.to, amount: ctrl.amount }).then(function(res) {
             ctrl.persons = res.data
@@ -74,9 +66,8 @@ app.controller('Ctrl', [ '$http', function($http) {
     }
 
     ctrl.isTransferAvailable = function() {
-        if(!ctrl.persons || !ctrl.persons[parseInt(ctrl.from)] || ctrl.from == ctrl.to || ctrl.amount <= 0) return false
-        let balance = ctrl.persons[parseInt(ctrl.from)].balance
-        return balance >= ctrl.amount
+        if(!ctrl.persons || ctrl.from == ctrl.to || ctrl.amount <= 0) return false
+        return true
     }
 
     ctrl.isDepositAvailable = function() {
@@ -90,6 +81,7 @@ app.controller('Ctrl', [ '$http', function($http) {
     // retrieve persons list on start
     $http.get('/person').then(function(res) {
         ctrl.persons = res.data
+        ctrl.from = ctrl.to = ctrl.persons[0]._id
     }, function(err) {
         console.error(err.data)
     })

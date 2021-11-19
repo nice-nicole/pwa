@@ -54,10 +54,10 @@
         <label for="transfer">Transfer from one account to another</label>
         <form id="transfer" class="form form-inline">
           <select class="form-control" ng-model="ctrl.from">
-            <option ng-repeat="person in ctrl.persons" value="{{$index}}" ng-bind="person.firstName+' '+person.lastName"></option>
+            <option ng-repeat="person in ctrl.persons" value="{{person._id}}" ng-bind="person.firstName+' '+person.lastName"></option>
           </select>
           <select class="form-control" ng-model="ctrl.to">
-            <option ng-repeat="person in ctrl.persons" value="{{$index}}" ng-bind="person.firstName+' '+person.lastName"></option>
+            <option ng-repeat="person in ctrl.persons" value="{{person._id}}" ng-bind="person.firstName+' '+person.lastName"></option>
           </select>
           <input class="form-control" type="number" placeholder="amount" ng-model="ctrl.amount"/>
           <button class="btn btn-default" ng-click="ctrl.transfer()" ng-disabled="!ctrl.isTransferAvailable()">Submit</button>
