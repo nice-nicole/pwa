@@ -10,6 +10,11 @@
 
   <body>
       <div class="container" ng-controller="Ctrl as ctrl">
+
+        <a href="#/">Home</a>
+        <a href="#/persons">Persons</a>
+        <a href="#/transfers">Transfers</a>
+
         <img src="images/wmii.png">
         <h1>pwa2021 - the first page</h1>
         <a class="btn btn-primary" href="second.html">The second page</a>
@@ -63,9 +68,15 @@
           <button class="btn btn-default" ng-click="ctrl.transfer()" ng-disabled="!ctrl.isTransferAvailable()">Submit</button>
         </form><br/>
 
+        <div ng-view></div>
+
       </div>
 
       <script src="node_modules/angular/angular.min.js"></script>
+      <script src="node_modules/angular-route/angular-route.min.js"></script>
       <script src="js/app.js"></script>
+      <script src="js/homeCtrl.js"></script>
+      <script src="js/personsCtrl.js"></script>
+      <script src="js/transfersCtrl.js"></script>
     </body>
 </html>

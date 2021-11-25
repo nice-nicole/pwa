@@ -1,4 +1,20 @@
-let app = angular.module('pwa2021', [])
+let app = angular.module('pwa2021', [ 'ngRoute' ])
+
+// router menu
+app.constant('routes', [
+	{ route: '/', templateUrl: 'homeView.html', controller: 'HomeCtrl', controllerAs: 'ctrl', menu: '<i class="fa fa-lg fa-home"></i>' },
+	{ route: '/persons', templateUrl: 'personsView.html', controller: 'PersonsCtrl', controllerAs: 'ctrl', menu: 'Persons' },
+    { route: '/transfers', templateUrl: 'transfersView.html', controller: 'TransfersCtrl', controllerAs: 'ctrl', menu: 'Transfers' }
+])
+
+// router installation
+app.config(['$routeProvider', '$locationProvider', 'routes', function($routeProvider, $locationProvider, routes) {
+    $locationProvider.hashPrefix('')
+	for(var i in routes) {
+		$routeProvider.when(routes[i].route, routes[i])
+	}
+	$routeProvider.otherwise({ redirectTo: '/' })
+}])
 
 app.controller('Ctrl', [ '$http', function($http) {
     console.log('Ctrl started')
