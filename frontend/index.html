@@ -38,59 +38,6 @@
           </div>
       </nav>
 
-        <img src="images/wmii.png">
-        <h1>pwa2021 - the first page</h1>
-        <a class="btn btn-primary" href="second.html">The second page</a>
-
-        <table class="table table-stripped">
-          <tr>
-            <th>#</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Year of birth</th>
-            <th>Balance</th>
-            <th></th>
-          </tr>        
-          <tr ng-repeat="person in ctrl.persons">
-            <td><span class="badge" ng-bind="$index"></span></td>
-            <td ng-bind="person.firstName"></td>
-            <td ng-bind="person.lastName"></td>
-            <td ng-bind="person.year"></td>
-            <td ng-bind="person.balance"></td>
-            <td>
-              <button class="btn btn-danger btn-xs" ng-click="ctrl.delete(person._id)">del</button>
-              <button class="btn btn-primary btn-xs" ng-click="ctrl.copy($index)">copy</button>
-            </td>
-          </tr>
-        </table>
-
-        <label for="edit_person_data">Edit person data</label>
-        <form id="edit_person_data" class="form form-inline">
-          <input class="form-control" type="text" placeholder="first name" ng-model="ctrl.person.firstName"/>
-          <input class="form-control" type="text" placeholder="last name" ng-model="ctrl.person.lastName"/>
-          <input class="form-control" type="number" placeholder="year" ng-model="ctrl.person.year"/>
-          <button class="btn btn-default" ng-click="ctrl.new()" ng-disabled="!ctrl.isPersonDataCorrect()">New</button>
-          <button class="btn btn-default" ng-click="ctrl.modify()" ng-if="ctrl.clickedRow >= 0" ng-disabled="!ctrl.isPersonDataCorrect()">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
-        </form><br/>
-
-        <label for="deposit_on_all">Deposit on all accounts</label>
-        <form id="deposit_on_all" class="form form-inline">
-          <input class="form-control" type="number" placeholder="amount" ng-model="ctrl.amount"/>
-          <button class="btn btn-default" ng-click="ctrl.deposit_on_all()" ng-disabled="!ctrl.isDepositAvailable()">Submit</button>
-        </form><br/>
-
-        <label for="transfer">Transfer from one account to another</label>
-        <form id="transfer" class="form form-inline">
-          <select class="form-control" ng-model="ctrl.from">
-            <option ng-repeat="person in ctrl.persons" value="{{person._id}}" ng-bind="person.firstName+' '+person.lastName"></option>
-          </select>
-          <select class="form-control" ng-model="ctrl.to">
-            <option ng-repeat="person in ctrl.persons" value="{{person._id}}" ng-bind="person.firstName+' '+person.lastName"></option>
-          </select>
-          <input class="form-control" type="number" placeholder="amount" ng-model="ctrl.amount"/>
-          <button class="btn btn-default" ng-click="ctrl.transfer()" ng-disabled="!ctrl.isTransferAvailable()">Submit</button>
-        </form><br/>
-
         <div ng-view></div>
 
       </div>
