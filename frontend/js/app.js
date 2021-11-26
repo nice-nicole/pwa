@@ -47,29 +47,5 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', function($htt
    // end of menu preparation
 
 
-    ctrl.deposit_on_all = function() {
-        $http.post('/balance', { amount: ctrl.amount }).then(function(res) {
-            ctrl.persons = res.data
-        }, function(err) {
-            console.error(err.data)
-        })
-    }
-
-    ctrl.transfer = function() {
-        $http.put('/balance', { from: ctrl.from, to: ctrl.to, amount: ctrl.amount }).then(function(res) {
-            ctrl.persons = res.data
-        }, function(err) {
-            console.error(err.data)
-        })
-    }
-
-    ctrl.isTransferAvailable = function() {
-        if(!ctrl.persons || ctrl.from == ctrl.to || ctrl.amount <= 0) return false
-        return true
-    }
-
-    ctrl.isDepositAvailable = function() {
-        return ctrl.amount > 0
-    }
-
+ 
 }])
