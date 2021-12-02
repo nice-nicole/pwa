@@ -13,7 +13,24 @@ const person = module.exports = {
     },
 
     sendData: function(res) {
-        db.persons.find().toArray(function(err, data) {
+        db.persons.aggregate([{
+            $lookup: {
+                from: 'transactions',
+                localField: '_id',
+                foreignField: 'person_id',
+                as: 'transactions'
+            }
+        }, {
+            $addFields: {
+                balance: {
+                    $sum: '$transactions.amount'
+                }
+            }
+        }, {
+            $project: {
+                transactions: false
+            }
+        }]).toArray(function(err, data) {
             if(!err) 
                 lib.sendJson(res, data)
             else

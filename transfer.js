@@ -1,0 +1,44 @@
+const mongodb = require('mongodb')
+const db = require('./db')
+const lib = require('./lib')
+const person = require('./person')
+
+const transfer = module.exports = {
+
+    validateAmount: function(amount) {
+        return !isNaN(amount) && amount != 0 
+    },
+
+    validateTransaction: function(transaction) {
+        transaction.person_id = db.ObjectId(transaction.person_id)
+        return transaction.person_id && transfer.validateAmount(transaction.amount)
+    },
+
+    handle: function(env) {
+        switch(env.req.method) {
+            case 'POST':
+                // deposit/withdraw the amount on/from all accounts
+                lib.sendError(env.res, 405, 'Method not yet implemented (homework')
+                break
+            case 'PUT':
+                // transfer the amount from one account to another
+                let transactionIn = { person_id: env.payload.to, amount: env.payload.amount }
+                let transactionOut = { person_id: env.payload.from, amount: -env.payload.amount }
+                if(transfer.validateTransaction(transactionIn) && transfer.validateTransaction(transactionOut)) {
+                    // create two objects in transactions
+                    db.transactions.insertMany([ transactionIn, transactionOut ], function(err, result) {
+                        if(!err) {
+                            lib.sendJson(env.res, result.insertedIds)
+                        } else {
+                            lib.sendError(env.res, 400, 'Inserting transactions failed')
+                        }
+                    })
+                } else {
+                    lib.sendError(env.res, 400, 'Wrong from, to or amount')
+                }
+                break        
+           default:
+                lib.sendError(env.res, 405, 'Method not implemented')
+        }
+    }
+}

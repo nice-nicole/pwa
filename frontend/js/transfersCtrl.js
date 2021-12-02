@@ -3,7 +3,7 @@ app.controller('TransfersCtrl', [ '$http', function($http) {
     let ctrl = this
 
     ctrl.deposit_on_all = function() {
-        $http.post('/balance', { amount: ctrl.amount }).then(function(res) {
+        $http.post('/transfer', { amount: ctrl.amount }).then(function(res) {
             ctrl.persons = res.data
         }, function(err) {
             console.error(err.data)
@@ -11,8 +11,8 @@ app.controller('TransfersCtrl', [ '$http', function($http) {
     }
 
     ctrl.transfer = function() {
-        $http.put('/balance', { from: ctrl.from, to: ctrl.to, amount: ctrl.amount }).then(function(res) {
-            ctrl.persons = res.data
+        $http.put('/transfer', { from: ctrl.from, to: ctrl.to, amount: ctrl.amount }).then(function(res) {
+            console.log('Transfer committed')
         }, function(err) {
             console.error(err.data)
         })

@@ -4,6 +4,7 @@ const person = require('./person')
 const db = module.exports = {
 
     persons: null,
+    transactions: null,
 
     ObjectId: function(_idStr) {
         try {
@@ -21,6 +22,7 @@ const db = module.exports = {
             }
             let conn = connection.db('pwa2021')
             db.persons = conn.collection('persons')
+            db.transactions = conn.collection('transactions')
             nextTick()
         })
     }
