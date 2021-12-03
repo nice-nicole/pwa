@@ -4,7 +4,8 @@ let app = angular.module('pwa2021', [ 'ngRoute', 'ngSanitize' ])
 app.constant('routes', [
 	{ route: '/', templateUrl: 'homeView.html', controller: 'HomeCtrl', controllerAs: 'ctrl', menu: '<i class="fa fa-lg fa-home"></i>' },
 	{ route: '/persons', templateUrl: 'personsView.html', controller: 'PersonsCtrl', controllerAs: 'ctrl', menu: 'Persons' },
-    { route: '/transfers', templateUrl: 'transfersView.html', controller: 'TransfersCtrl', controllerAs: 'ctrl', menu: 'Transfers' }
+    { route: '/transfers', templateUrl: 'transfersView.html', controller: 'TransfersCtrl', controllerAs: 'ctrl', menu: 'Transfers' },
+    { route: '/history', templateUrl: 'historyView.html', controller: 'HistoryCtrl', controllerAs: 'ctrl', menu: 'History' }
 ])
 
 // router installation

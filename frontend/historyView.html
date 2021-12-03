@@ -1,0 +1,10 @@
+<table class="table table-stripped">
+    <tr>
+      <th>When</th>
+      <th>Amount</th>
+    </tr>        
+    <tr ng-repeat="transaction in ctrl.transactions">
+      <td ng-bind="transaction.when"></td>
+      <td ng-bind="transaction.amount"></td>
+    </tr>
+  </table>
