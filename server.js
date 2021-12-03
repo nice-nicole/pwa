@@ -9,6 +9,7 @@ let nodestatic = require('node-static')
 let lib = require('./lib')
 let person = require('./person')
 let transfer = require('./transfer')
+let history = require('./history')
 let db = require('./db')
 
 let httpServer = http.createServer()
@@ -41,6 +42,9 @@ httpServer.on('request', function(req, res) {
                 break
             case '/transfer':
                 transfer.handle(env)
+                break
+            case '/history':
+                history.handle(env)
                 break
             default:
                 fileServer.serve(req, res)
