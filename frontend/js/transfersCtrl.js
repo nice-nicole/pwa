@@ -4,7 +4,7 @@ app.controller('TransfersCtrl', [ '$http', function($http) {
 
     ctrl.deposit_on_all = function() {
         $http.post('/transfer', { amount: ctrl.amount }).then(function(res) {
-            ctrl.persons = res.data
+            console.log('Deposit committed')
         }, function(err) {
             console.error(err.data)
         })
