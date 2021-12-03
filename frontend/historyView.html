@@ -1,4 +1,10 @@
-<table class="table table-stripped">
+<form id="transfer" class="form form-inline">
+  <select class="form-control" ng-model="ctrl.person_id" ng-change="ctrl.refreshHistory()">
+    <option ng-repeat="person in ctrl.persons" value="{{person._id}}" ng-bind="person.firstName+' '+person.lastName"></option>
+  </select>
+</form>
+
+  <table class="table table-stripped">
     <tr>
       <th>When</th>
       <th>Amount</th>
