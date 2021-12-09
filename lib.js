@@ -1,4 +1,7 @@
 const lib = module.exports = {
+
+    sessions: {},
+    
     sendJson: function(res, obj) {
         res.writeHead(200, {'Content-type': 'application/json'})
         res.write(JSON.stringify(obj))

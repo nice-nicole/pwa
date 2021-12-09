@@ -4,6 +4,8 @@ let url = require('url')
 
 // external modules
 let nodestatic = require('node-static')
+let uuid = require('uuid')
+let cookies = require('cookies')
 
 // own modules
 let lib = require('./lib')
@@ -20,6 +22,20 @@ httpServer.on('request', function(req, res) {
     // prepare object to pass to handling methods
     let env = { req, res }
 
+    // cookies exchange
+    let appCookies = new cookies(req, res)
+    let session = appCookies.get('session')
+    let now = Date.now()
+    if(!session || !lib.sessions[session]) {
+        session = uuid.v4()
+        lib.sessions[session] = { from: req.connection.remoteAddress, created: now, touched: now }
+    } else {
+        lib.sessions[session].from = req.connection.remoteAddress
+        lib.sessions[session].touched = now
+    }
+    appCookies.set('session', session, { httpOnly: false })
+    env.session = session
+
     // parse url
     env.urlParsed = url.parse(req.url, true)
 
@@ -35,7 +51,7 @@ httpServer.on('request', function(req, res) {
             lib.sendError(res, 400, ex.message)
             return
         }
-        console.log(req.method, env.urlParsed.pathname, JSON.stringify(env.urlParsed.query), JSON.stringify(env.payload))
+        console.log(session, req.method, env.urlParsed.pathname, JSON.stringify(env.urlParsed.query), JSON.stringify(env.payload))
         switch(env.urlParsed.pathname) {
             case '/person':
                 person.handle(env)
