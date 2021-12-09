@@ -13,6 +13,7 @@ let person = require('./person')
 let transfer = require('./transfer')
 let history = require('./history')
 let db = require('./db')
+let auth = require('./auth')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
@@ -53,6 +54,9 @@ httpServer.on('request', function(req, res) {
         }
         console.log(session, req.method, env.urlParsed.pathname, JSON.stringify(env.urlParsed.query), JSON.stringify(env.payload))
         switch(env.urlParsed.pathname) {
+            case '/auth':
+                auth.handle(env)
+                break
             case '/person':
                 person.handle(env)
                 break
