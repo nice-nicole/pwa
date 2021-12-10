@@ -13,6 +13,7 @@ let person = require('./person')
 let transfer = require('./transfer')
 let history = require('./history')
 let db = require('./db')
+let example = require('./example')
 let auth = require('./auth')
 
 let httpServer = http.createServer()
@@ -73,5 +74,6 @@ httpServer.on('request', function(req, res) {
 })
 
 db.init(function() {
+    example.initialize()
     httpServer.listen(7777)
 })

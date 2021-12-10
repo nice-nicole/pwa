@@ -5,6 +5,7 @@ const db = module.exports = {
 
     persons: null,
     transactions: null,
+    users: null,
 
     ObjectId: function(_idStr) {
         try {
@@ -23,6 +24,7 @@ const db = module.exports = {
             let conn = connection.db('pwa2021')
             db.persons = conn.collection('persons')
             db.transactions = conn.collection('transactions')
+            db.users = conn.collection('users')
             nextTick()
         })
     }

@@ -34,6 +34,20 @@
                       </li>
                   </ul>
 
+                  <ul class="nav navbar-nav navbar-right">
+                    <form class="navbar-form">
+                        <div class="form-group" ng-if="!ctrl.login">
+                            <input class="form-control" type="text" placeholder="login" ng-model="ctrl.creds.login"/>
+                            <input class="form-control" type="password" placeholder="password" ng-model="ctrl.creds.password"/>
+                            <button class="btn btn-default fa fa-sign-in" ng-click="ctrl.doLogin()" ng-disabled="!ctrl.creds.login"></button>
+                        </div>
+                        <div class="form-group" ng-if="ctrl.login">
+                            <span class="label label-success" style="font-size: 1em;" ng-bind="ctrl.login"></span>
+                            <button class="btn btn-default fa fa-sign-out" ng-click="ctrl.doLogout()"></button>
+                        </div>
+                    </form>
+                </ul>    
+
               </div>
           </div>
       </nav>
