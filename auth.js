@@ -11,16 +11,20 @@ const auth = module.exports = {
                 break
             case 'POST':
                 // to validate credentials and log into the system
-                if(env.payload.login && env.payload.login + '1' == env.payload.password) {
-                    lib.sessions[env.session].login = env.payload.login
-                    lib.sendJson(env.res, lib.sessions[env.session])
-                } else {
-                    lib.sendError(env.res, 401, 'Authentication failed')    
-                }
+                db.users.findOne({ login: env.payload.login, password: env.payload.password }, function(err, result) {
+                    if(!err && result) {
+                        lib.sessions[env.session].login = result.login
+                        lib.sessions[env.session].role = result.role
+                        lib.sendJson(env.res, lib.sessions[env.session])
+                    } else {
+                        lib.sendError(env.res, 401, 'Authentication failed')    
+                    }    
+                })
                 break
             case 'DELETE':
                 // to log out from the system
                 delete lib.sessions[env.session].login
+                delete lib.sessions[env.session].role
                 lib.sendJson(env.res, lib.sessions[env.session])
                 break
             default:

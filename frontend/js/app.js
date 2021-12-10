@@ -1,4 +1,4 @@
-let app = angular.module('pwa2021', [ 'ngRoute', 'ngSanitize' ])
+let app = angular.module('pwa2021', [ 'ngRoute', 'ngSanitize', 'ngAnimate', 'ui.bootstrap' ])
 
 // router menu
 app.constant('routes', [
@@ -17,9 +17,59 @@ app.config(['$routeProvider', '$locationProvider', 'routes', function($routeProv
 	$routeProvider.otherwise({ redirectTo: '/' })
 }])
 
-app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', function($http, $location, $scope, routes) {
+// common components
+
+app.service('lib', [ function() {
+    let lib = this
+
+    let alert = { text: '', type: 'alert-success' }
+
+    lib.alertText = function() { return alert.text }
+    lib.alertType = function() { return alert.type }
+    lib.alertClose = function() { alert.text = '' }
+    lib.alertShow = function(text, type = 'success') {
+        alert.text = text
+        alert.type = 'alert-' + type
+        console.log(alert.type + ':', alert.text)
+    }
+
+}])
+
+app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', function($http, $location, $scope, routes, lib) {
     console.log('Ctrl started')
     let ctrl = this
+
+    ctrl.lib = lib
+
+    // authorization helpers
+
+    ctrl.creds = { login: '', password: '' }
+    ctrl.login = null
+
+    $http.get('/auth').then(
+        function(res) { ctrl.login = res.data.login },
+        function(err) {}
+    )
+
+    ctrl.doLogin = function() {
+        $http.post('/auth', ctrl.creds).then(
+            function(res) {
+                ctrl.login = res.data.login
+                lib.alertShow('Welcome on board, ' + ctrl.login)
+            },
+            function(err) { lib.alertShow(err.data.message, 'danger') }
+        )    
+    }
+
+    ctrl.doLogout = function() {
+        $http.delete('/auth').then(
+            function(res) {
+                ctrl.login = null
+                lib.alertShow('You are logged out')
+            },
+            function(err) {}
+        )    
+    }
 
     // menu building
 
@@ -32,21 +82,15 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', function($htt
        $location.path('/')
    }
 
-   // kontrola nad menu zwiniętym i rozwiniętym
    ctrl.isCollapsed = true
    $scope.$on('$routeChangeSuccess', function () {
        ctrl.isCollapsed = true
    })
    
-   // sprawdzenie która pozycja menu jest wybrana
    ctrl.navClass = function(page) {
        return page === $location.path() ? 'active' : ''
    }    
 
    rebuildMenu()
-
-   // end of menu preparation
-
-
  
 }])

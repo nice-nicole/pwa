@@ -50,7 +50,11 @@
 
               </div>
           </div>
-      </nav>
+        </nav>
+
+        <div uib-alert class="alert-animated" ng-class="ctrl.lib.alertType()" close="ctrl.lib.alertClose()" dismiss-on-timeout="3000" ng-if="ctrl.lib.alertText()">
+            {{ctrl.lib.alertText()}}
+        </div>
 
         <div ng-view></div>
 
@@ -59,6 +63,8 @@
       <script src="node_modules/angular/angular.min.js"></script>
       <script src="node_modules/angular-route/angular-route.min.js"></script>
       <script src="node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+      <script src="node_modules/angular-animate/angular-animate.min.js"></script>
+      <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
       <script src="js/app.js"></script>
       <script src="js/homeCtrl.js"></script>
       <script src="js/personsCtrl.js"></script>
