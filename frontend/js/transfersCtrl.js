@@ -1,20 +1,20 @@
-app.controller('TransfersCtrl', [ '$http', function($http) {
+app.controller('TransfersCtrl', [ '$http', 'lib', function($http, lib) {
     console.log('TransfersCtrl started')
     let ctrl = this
 
     ctrl.deposit_on_all = function() {
         $http.post('/transfer', { amount: ctrl.amount }).then(function(res) {
-            console.log('Deposit committed')
+            lib.alertShow('Deposit (' + ctrl.amount + ') committed')
         }, function(err) {
-            console.error(err.data)
+            lib.alertShow('Deposit (' + ctrl.amount + ') rejected', 'danger')
         })
     }
 
     ctrl.transfer = function() {
         $http.put('/transfer', { from: ctrl.from, to: ctrl.to, amount: ctrl.amount }).then(function(res) {
-            console.log('Transfer committed')
+            lib.alertShow('Transfer (' + ctrl.amount + ') committed')
         }, function(err) {
-            console.error(err.data)
+            lib.alertShow('Transfer (' + ctrl.amount + ') rejected', 'danger')
         })
     }
 
