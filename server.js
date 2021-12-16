@@ -15,6 +15,7 @@ let history = require('./history')
 let db = require('./db')
 let example = require('./example')
 let auth = require('./auth')
+let security = require('./security')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
@@ -54,6 +55,11 @@ httpServer.on('request', function(req, res) {
             return
         }
         console.log(session, req.method, env.urlParsed.pathname, JSON.stringify(env.urlParsed.query), JSON.stringify(env.payload))
+        let err = security.isForbidden(env)
+        if(err) {
+            lib.sendError(res, 403, err)
+            return
+        }
         switch(env.urlParsed.pathname) {
             case '/auth':
                 auth.handle(env)
