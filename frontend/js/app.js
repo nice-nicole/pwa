@@ -3,9 +3,9 @@ let app = angular.module('pwa2021', [ 'ngRoute', 'ngSanitize', 'ngAnimate', 'ui.
 // router menu
 app.constant('routes', [
 	{ route: '/', templateUrl: 'homeView.html', controller: 'HomeCtrl', controllerAs: 'ctrl', menu: '<i class="fa fa-lg fa-home"></i>' },
-	{ route: '/persons', templateUrl: 'personsView.html', controller: 'PersonsCtrl', controllerAs: 'ctrl', menu: 'Persons' },
-    { route: '/transfers', templateUrl: 'transfersView.html', controller: 'TransfersCtrl', controllerAs: 'ctrl', menu: 'Transfers' },
-    { route: '/history', templateUrl: 'historyView.html', controller: 'HistoryCtrl', controllerAs: 'ctrl', menu: 'History' }
+	{ route: '/persons', templateUrl: 'personsView.html', controller: 'PersonsCtrl', controllerAs: 'ctrl', menu: 'Persons', roles: ['admin', 'user'] },
+    { route: '/transfers', templateUrl: 'transfersView.html', controller: 'TransfersCtrl', controllerAs: 'ctrl', menu: 'Transfers', roles: ['admin', 'user'] },
+    { route: '/history', templateUrl: 'historyView.html', controller: 'HistoryCtrl', controllerAs: 'ctrl', menu: 'History', roles: ['admin'] }
 ])
 
 // router installation
@@ -33,6 +33,8 @@ app.service('lib', [ function() {
         console.log(alert.type + ':', alert.text)
     }
 
+    lib.login = null
+    lib.role = null
 }])
 
 app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', function($http, $location, $scope, routes, lib) {
@@ -44,18 +46,14 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', functi
     // authorization helpers
 
     ctrl.creds = { login: '', password: '' }
-    ctrl.login = null
-
-    $http.get('/auth').then(
-        function(res) { ctrl.login = res.data.login },
-        function(err) {}
-    )
 
     ctrl.doLogin = function() {
         $http.post('/auth', ctrl.creds).then(
             function(res) {
-                ctrl.login = res.data.login
+                lib.login = res.data.login
+                lib.role = res.data.role
                 lib.alertShow('Welcome on board, ' + ctrl.login)
+                rebuildMenu()
             },
             function(err) { lib.alertShow(err.data.message, 'danger') }
         )    
@@ -64,8 +62,10 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', functi
     ctrl.doLogout = function() {
         $http.delete('/auth').then(
             function(res) {
-                ctrl.login = null
+                lib.login = null
+                lib.role = null
                 lib.alertShow('You are logged out')
+                rebuildMenu()
             },
             function(err) {}
         )    
@@ -76,8 +76,11 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', functi
    ctrl.menu = []
 
    let rebuildMenu = function() {
+       ctrl.menu.length = 0
        for(var i in routes) {
-           ctrl.menu.push({ route: routes[i].route, title: routes[i].menu })
+           if(!routes[i].roles || routes[i].roles.includes(lib.role)) {
+               ctrl.menu.push({ route: routes[i].route, title: routes[i].menu })
+           } 
        }
        $location.path('/')
    }
@@ -91,6 +94,13 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', functi
        return page === $location.path() ? 'active' : ''
    }    
 
-   rebuildMenu()
- 
+   $http.get('/auth').then(
+        function(res) {
+            lib.login = res.data.login
+            lib.role = res.data.role
+            rebuildMenu() 
+        },
+        function(err) {}
+   )
+
 }])

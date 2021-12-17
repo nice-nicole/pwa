@@ -1,4 +1,4 @@
-app.controller('PersonsCtrl', [ '$http', function($http) {
+app.controller('PersonsCtrl', [ '$http', 'lib', function($http, lib) {
     console.log('PersonsCtrl started')
     let ctrl = this
 
@@ -49,6 +49,10 @@ app.controller('PersonsCtrl', [ '$http', function($http) {
 
     ctrl.isPersonDataCorrect = function() {
         return ctrl.person.firstName && ctrl.person.lastName && ctrl.person.year >= 1500
+    }
+
+    ctrl.isAdmin = function() {
+        return lib.role == 'admin'
     }
 
     // retrieve persons list on start
