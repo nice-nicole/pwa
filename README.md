@@ -25,3 +25,13 @@ Please remember you have to enter the command also in the frontend folder (from 
 npm start
 ```
 starts a backend (server) of our project. To stop it, press Ctrl+C (and maybe type Y and enter to confirm).
+
+## Basic project (for grade 3 so satisfactory)
+
+* Create new collection in database: groups. It includes objects consisting in only one field - name (except of automatically created _id)
+
+* All objects in persons collection can by equipped with extra field: group_id. It defines what group the user belongs to. The value of the field is ObjectId, not name of the group.
+
+* Build a page and corresponding controller, connected to the menu position "Groups" - available only for admin role. On the page we can create a group, modify name of existing one and delete a group.
+
+* On the persons view, you should display the name of group the user belongs to. It should be also possible to set membership of any user (it is the hardest part of the project).
