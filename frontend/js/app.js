@@ -1,4 +1,9 @@
-let app = angular.module('pwa2021', [ 'ngRoute', 'ngSanitize', 'ngAnimate', 'ui.bootstrap' ])
+let app = angular.module('pwa2021', [ 'ngRoute', 'ngSanitize', 'ngAnimate', 'ngCookies', 'ws', 'ui.bootstrap' ])
+
+// websocket config
+app.config(['wsProvider', function(wsProvider) {
+    wsProvider.setUrl('ws://' + window.location.host)
+}])
 
 // router menu
 app.constant('routes', [
@@ -19,7 +24,7 @@ app.config(['$routeProvider', '$locationProvider', 'routes', function($routeProv
 
 // common components
 
-app.service('lib', [ function() {
+app.service('lib', [ '$cookies', function($cookies) {
     let lib = this
 
     let alert = { text: '', type: 'alert-success' }
@@ -35,13 +40,22 @@ app.service('lib', [ function() {
 
     lib.login = null
     lib.role = null
+    lib.session = $cookies.get('session')
 }])
 
-app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', function($http, $location, $scope, routes, lib) {
+app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', 'ws', function($http, $location, $scope, routes, lib, ws) {
     console.log('Ctrl started')
     let ctrl = this
 
     ctrl.lib = lib
+
+	// handle ws messages from server
+	ws.on('message', function(messageEvent) {
+        console.log('ws:', messageEvent.data)
+    })
+
+    // initialize WS
+    ws.send(lib.session)
 
     // authorization helpers
 
@@ -52,7 +66,7 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', functi
             function(res) {
                 lib.login = res.data.login
                 lib.role = res.data.role
-                lib.alertShow('Welcome on board, ' + ctrl.login)
+                lib.alertShow('Welcome on board, ' + lib.login)
                 rebuildMenu()
             },
             function(err) { lib.alertShow(err.data.message, 'danger') }

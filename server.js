@@ -6,6 +6,7 @@ let url = require('url')
 let nodestatic = require('node-static')
 let uuid = require('uuid')
 let cookies = require('cookies')
+let ws = require('ws')
 
 // own modules
 let lib = require('./lib')
@@ -19,6 +20,7 @@ let security = require('./security')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
+lib.wsServer = new ws.Server({ server: httpServer })
 
 httpServer.on('request', function(req, res) {
 
@@ -79,7 +81,22 @@ httpServer.on('request', function(req, res) {
     }) 
 })
 
+lib.wsServer.on('connection', function connection(client) {
+	
+	console.log('Websocket connection established')
+  
+	client.on('message', function(session) {
+		console.log('Websocket received a session id', session.toString())
+		
+        if(lib.sessions[session]) {
+            client.session = session
+			lib.sessions[session].wsClient = client
+        }
+	})
+})
+
 db.init(function() {
     example.initialize()
     httpServer.listen(7777)
+    console.log('Backend started')
 })
