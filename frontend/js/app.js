@@ -49,11 +49,6 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', 'ws', 
 
     ctrl.lib = lib
 
-	// handle ws messages from server
-	ws.on('message', function(messageEvent) {
-        console.log('ws:', messageEvent.data)
-    })
-
     // initialize WS
     ws.send(lib.session)
 

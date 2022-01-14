@@ -19,7 +19,7 @@ const transfer = module.exports = {
         switch(env.req.method) {
             case 'POST':
                 lib.broadcast('Deposit on all', function(client) {
-                    return client.session != env.session
+                    return lib.sessions[client.session].role && client.session != env.session
                 })
                 // deposit/withdraw the amount on/from all accounts
                 if(transfer.validateAmount(env.payload.amount)) {

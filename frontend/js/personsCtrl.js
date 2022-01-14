@@ -1,4 +1,4 @@
-app.controller('PersonsCtrl', [ '$http', 'lib', function($http, lib) {
+app.controller('PersonsCtrl', [ '$http', 'lib', 'ws', function($http, lib, ws) {
     console.log('PersonsCtrl started')
     let ctrl = this
 
@@ -55,12 +55,23 @@ app.controller('PersonsCtrl', [ '$http', 'lib', function($http, lib) {
         return lib.role == 'admin'
     }
 
-    // retrieve persons list on start
-    $http.get('/person').then(function(res) {
-        ctrl.persons = res.data
-        ctrl.from = ctrl.to = ctrl.persons[0]._id
-    }, function(err) {
-        console.error(err.data)
-    })
+    var refresh = function() {
+        // retrieve persons list on start
+        $http.get('/person').then(function(res) {
+            ctrl.persons = res.data
+            ctrl.from = ctrl.to = ctrl.persons[0]._id
+        }, function(err) {
+            console.error(err.data)
+        })
+    }
 
+    refresh()
+
+    // handle ws messages from server
+	ws.on('message', function(messageEvent) {
+        // console.log('ws:', messageEvent.data)
+        if(messageEvent.data == 'Deposit on all') {
+            refresh()
+        }
+    })
 }])
