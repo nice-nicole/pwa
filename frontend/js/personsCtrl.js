@@ -1,4 +1,4 @@
-app.controller('PersonsCtrl', [ '$http', 'lib', 'ws', function($http, lib, ws) {
+app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, $scope, lib, ws) {
     console.log('PersonsCtrl started')
     let ctrl = this
 
@@ -65,13 +65,11 @@ app.controller('PersonsCtrl', [ '$http', 'lib', 'ws', function($http, lib, ws) {
         })
     }
 
-    refresh()
-
-    // handle ws messages from server
-	ws.on('message', function(messageEvent) {
-        // console.log('ws:', messageEvent.data)
-        if(messageEvent.data == 'Deposit on all') {
+    $scope.$on('change', function(event, arg) {
+        if(arg.collection == 'persons' || arg.collection == 'transactions') {
             refresh()
         }
     })
+
+    refresh()
 }])

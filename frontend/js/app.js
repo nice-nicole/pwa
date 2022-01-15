@@ -51,6 +51,23 @@ app.controller('Ctrl', [ '$http', '$location', '$scope', 'routes', 'lib', 'ws', 
 
     // initialize WS
     ws.send(lib.session)
+    console.log('Send a session id', lib.session, ' to ws server')
+
+    // handle ws messages from server
+	ws.on('message', function(messageEvent) {
+        console.log('ws message from server', messageEvent.data)
+        try {
+            let message = JSON.parse(messageEvent.data)
+            if(message.event && message.source != lib.session) {
+                let event = message.event
+                delete message.event
+                delete message.source
+                $scope.$broadcast(event, message)
+            }
+        } catch(ex) {
+            console.error('Broken ws message')
+        }
+    })
 
     // authorization helpers
 

@@ -10,17 +10,32 @@ const lib = module.exports = {
         res.write(JSON.stringify(obj))
         res.end()
     },
+
     sendError: function(res, errno, message = '') {
         res.writeHead(errno, {'Content-type': 'application/json'})
         res.write(JSON.stringify({ message: message }))
         res.end()
     },
-    broadcast: function(message, selector = function(client) { return true }) {
+
+    isClientLogged: function(client) {
+        return lib.sessions[client.session] && lib.sessions[client.session].role
+    },
+
+    isClientAdmin: function(client) {
+        return lib.sessions[client.session] && lib.sessions[client.session].role == 'admin'
+    },
+
+    // broadcast message { event: '...', ... }
+    // default selector: broadcase only to logged users
+    broadcast: function(message, selector = lib.isClientLogged) {
+        let n = 0, m = 0
         lib.wsServer.clients.forEach(function(client) {
+            m++
             if(client.readyState == ws.OPEN && selector(client)) {
-                console.log("Sending a message to client:", client.session.toString(), " with data:", message)
-                client.send(message)
+                client.send(JSON.stringify(message))
+                n++
             }
         })
+        console.log('Sending a message', JSON.stringify(message), 'to', n, 'of', m, 'total clients')
     }
 }

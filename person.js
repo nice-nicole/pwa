@@ -50,6 +50,7 @@ const person = module.exports = {
                     newPerson.balance = 0
                     db.persons.insertOne(newPerson, function(err, res) {
                         if(!err) {
+                            lib.broadcast({ source: env.session, event: 'change', collection: 'persons' })
                             person.sendData(env.res)
                         } else {
                             lib.sendError(env.res, 400, 'Creating new object failed')
@@ -64,6 +65,7 @@ const person = module.exports = {
                 if(modifiedPerson) {
                     db.persons.findOneAndUpdate({ _id: _id }, { $set: modifiedPerson }, function(err, res) {
                         if(!err) {
+                            lib.broadcast({ source: env.session, event: 'change', collection: 'persons' })
                             person.sendData(env.res)
                         } else {
                             lib.sendError(env.res, 400, 'Updating object ' + _id + ' failed')
@@ -76,6 +78,7 @@ const person = module.exports = {
             case 'DELETE':
                 db.persons.findOneAndDelete({ _id: _id }, function(err, res) {
                     if(!err) {
+                        lib.broadcast({ source: env.session, event: 'change', collection: 'persons' })
                         person.sendData(env.res)
                     } else {
                         lib.sendError(env.res, 400, 'Deleting object ' + _id + ' failed')

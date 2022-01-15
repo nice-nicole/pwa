@@ -18,9 +18,6 @@ const transfer = module.exports = {
         let now = Date.now()
         switch(env.req.method) {
             case 'POST':
-                lib.broadcast('Deposit on all', function(client) {
-                    return lib.sessions[client.session].role && client.session != env.session
-                })
                 // deposit/withdraw the amount on/from all accounts
                 if(transfer.validateAmount(env.payload.amount)) {
                     let deposits = []
@@ -31,6 +28,7 @@ const transfer = module.exports = {
                         // create an object in transactions for each person
                         db.transactions.insertMany(deposits, function(err, result) {
                             if(!err) {
+                                lib.broadcast({ source: env.session, event: 'change', collection: 'transactions' })
                                 lib.sendJson(env.res, result.insertedIds)
                             } else {
                                 lib.sendError(env.res, 400, 'Inserting transactions failed')
@@ -49,6 +47,7 @@ const transfer = module.exports = {
                     // create two objects in transactions
                     db.transactions.insertMany([ transactionIn, transactionOut ], function(err, result) {
                         if(!err) {
+                            lib.broadcast({ source: env.session, event: 'change', collection: 'transactions' })
                             lib.sendJson(env.res, result.insertedIds)
                         } else {
                             lib.sendError(env.res, 400, 'Inserting transactions failed')
