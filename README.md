@@ -35,3 +35,17 @@ starts a backend (server) of our project. To stop it, press Ctrl+C (and maybe ty
 * Build a page and corresponding controller, connected to the menu position "Groups" - available only for admin role. On the page we can create a group, modify name of existing one and delete a group.
 
 * On the persons view, you should display the name of group the user belongs to. It should be also possible to set membership of any user (it is the hardest part of the project).
+
+## Project extension for grade 4 (good)
+
+* Create new view, ChatView and corresponding controller, join it to navigation menu
+
+* The view allow sending a text message to the server, which stores it in database with following attributes (group_id, sender_id, when, contents)
+
+* The view displays all data from database collection messages, which belong to the group of the user, with a sender and date of creation in descending order (so from the newest to the oldest one)
+
+* The data above should refresh automatically while someone sends new message to our group
+
+## Project extension for grade 5 (very good)
+
+Add to the previous project possibility of user's membership in many groups, with all consequences of the fact (editing user, many group chats)
