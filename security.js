@@ -6,6 +6,8 @@ const security = module.exports = {
         { pattern: '', role: 'admin', result: null }, // admin has full access to any url in our system
         { pattern: '^GET /person$', role: 'user', result: null },
         { pattern: ' /person$', role: '*', result: 'forbidden' },
+        { pattern: '^GET /person$', role: 'user', result: null },
+        { pattern: ' /person$', role: '*', result: 'forbidden' },
         { pattern: ' /transfer$', role: 'user', result: null },
         { pattern: ' /transfer$', role: '*', result: 'forbidden' },
         { pattern: ' /history$', role: '*', result: 'forbidden' },

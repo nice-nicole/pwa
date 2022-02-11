@@ -17,6 +17,7 @@ let db = require('./db')
 let example = require('./example')
 let auth = require('./auth')
 let security = require('./security')
+let group = require('./group')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
@@ -68,6 +69,9 @@ httpServer.on('request', function(req, res) {
                 break
             case '/person':
                 person.handle(env)
+                break
+            case '/group':
+                group.handle(env)
                 break
             case '/transfer':
                 transfer.handle(env)

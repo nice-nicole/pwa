@@ -12,8 +12,8 @@ const group = module.exports = {
         }
     },
 
-    sendData: function(res) {
-        db.groups.aggregate([  
+    sendData: function(res, _id) {
+        db.groups.aggregate([
             { $match: { group_id: _id } },
             { $sort: { when: -1 } }
         ]).toArray(function(err, data) {
@@ -23,17 +23,20 @@ const group = module.exports = {
                 lib.sendError(res, 400, err.message)
         })    
     },
-
+    
     handle: function(env) {
-        let _id = db.ObjectId(env.urlParsed.query._id)
+        // let _id = db.ObjectId(env.urlParsed.query._id)
+        let _id = env.urlParsed.query._id
         switch(env.req.method) {
             case 'GET':
-                group.sendData(env.res)
+                group.sendData(env.res, _id)
                 break
+   
             case 'POST':
                 let newGroup = group.validate(env.payload)
+                console.log("newGroup", newGroup)
                 if(newGroup) {
-                    newGroup.balance = 0
+                    // newGroup.balance = 0
                     db.groups.insertOne(newGroup, function(err, res) {
                         if(!err) {
                             lib.broadcast({ source: env.session, event: 'change', collection: 'groups' })

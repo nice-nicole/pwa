@@ -37,7 +37,6 @@ const person = module.exports = {
                 lib.sendError(res, 400, err.message)
         })    
     },
-
     handle: function(env) {
         let _id = db.ObjectId(env.urlParsed.query._id)
         switch(env.req.method) {

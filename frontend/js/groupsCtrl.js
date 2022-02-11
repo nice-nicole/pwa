@@ -18,6 +18,7 @@ app.controller('GroupsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, $
     ctrl.from = ctrl.to = null
 
     ctrl.new = function() {
+        // console.log("ctrl.group:",ctrl.group)
         $http.post('/group', ctrl.group).then(function(res) {
             ctrl.groups = res.data
         }, function(err) {

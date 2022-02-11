@@ -1,6 +1,6 @@
 const mongodb = require('mongodb')
-const person = require('./person')
-const group = require('./group')
+// const person = require('./person')
+// const group = require('./group')
 
 const db = module.exports = {
 
