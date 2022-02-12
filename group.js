@@ -23,10 +23,10 @@ const group = module.exports = {
                 lib.sendError(res, 400, err.message)
         })    
     },
-    
+
     handle: function(env) {
-        // let _id = db.ObjectId(env.urlParsed.query._id)
-        let _id = env.urlParsed.query._id
+        let _id = db.ObjectId(env.urlParsed.query._id)
+        // let _id = env.urlParsed.query._id
         switch(env.req.method) {
             case 'GET':
                 group.sendData(env.res, _id)
