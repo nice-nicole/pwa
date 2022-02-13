@@ -5,6 +5,7 @@
       <th>Last name</th>
       <th>Year of birth</th>
       <th>Balance</th>
+      <th>Group</th>
       <th></th>
     </tr>        
     <tr ng-repeat="person in ctrl.persons">
@@ -13,6 +14,8 @@
       <td ng-bind="person.lastName"></td>
       <td ng-bind="person.year"></td>
       <td ng-bind="person.balance"></td>
+      <td ng-bind="person.group"></td>
+
       <td>
         <div ng-if="ctrl.isAdmin()">
           <button class="btn btn-danger btn-xs" ng-click="ctrl.delete(person._id)">del</button>

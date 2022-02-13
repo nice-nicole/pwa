@@ -19,12 +19,21 @@ const person = module.exports = {
                 localField: '_id',
                 foreignField: 'person_id',
                 as: 'transactions'
+            },
+            $lookup: {
+                from: 'groups',
+                localField: '_id',
+                foreignField: 'person_id',
+                as: 'groups'
             }
         }, {
             $addFields: {
                 balance: {
                     $sum: '$transactions.amount'
                 }
+            },
+            $addFields: {
+                group: '$groups.groupName',
             }
         }, {
             $project: {
@@ -46,7 +55,7 @@ const person = module.exports = {
             case 'POST':
                 let newPerson = person.validate(env.payload)
                 if(newPerson) {
-                    newPerson.balance = 0
+                    // newPerson.balance = 0
                     db.persons.insertOne(newPerson, function(err, res) {
                         if(!err) {
                             lib.broadcast({ source: env.session, event: 'change', collection: 'persons' })

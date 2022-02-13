@@ -13,6 +13,7 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
     }
 
     ctrl.amount = 0
+    ctrl.group = ''
     ctrl.from = ctrl.to = null
 
     ctrl.new = function() {
@@ -66,7 +67,7 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
     }
 
     $scope.$on('change', function(event, arg) {
-        if(arg.collection == 'persons' || arg.collection == 'transactions') {
+        if(arg.collection == 'persons' || arg.collection == 'transactions' || arg.collection == 'groups') {
             refresh()
         }
     })
