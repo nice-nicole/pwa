@@ -31,7 +31,7 @@
     <input class="form-control" type="text" placeholder="first name" ng-model="ctrl.person.firstName"/>
     <input class="form-control" type="text" placeholder="last name" ng-model="ctrl.person.lastName"/>
     <input class="form-control" type="number" placeholder="year" ng-model="ctrl.person.year"/>
-    <select class="form-control" placeholder="group" ng-model="ctrl.person.group_id">
+    <select class="form-control" ng-model="ctrl.group_id">
       <option ng-repeat="group in ctrl.groups" value="{{group._id}}" ng-bind="group.groupName"></option>
     </select>
     <button class="btn btn-default" ng-click="ctrl.new()" ng-disabled="!ctrl.isPersonDataCorrect()">New</button>

@@ -45,11 +45,12 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
         ctrl.person.firstName = ctrl.persons[n].firstName,
         ctrl.person.lastName = ctrl.persons[n].lastName,
         ctrl.person.year = ctrl.persons[n].year,
+        ctrl.person.group_id = ctrl.persons[n].group_id,
         ctrl.clickedRow = n
     }
 
     ctrl.isPersonDataCorrect = function() {
-        return ctrl.person.personName
+        return ctrl.person.firstName && ctrl.person.lastName && ctrl.person.year >= 1500 && ctrl.person.group_id
     }
 
     ctrl.isAdmin = function() {
@@ -64,6 +65,13 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
         })
     
     }
+     // retrieve group list on start
+     $http.get('/group').then(function(res) {
+        ctrl.groups = res.data
+    }, function(err) {
+        console.error(err.data)
+    })
+
     $scope.$on('change', function(event, arg) {
         if(arg.collection == 'persons' || arg.collection == 'transactions') {
             refresh()

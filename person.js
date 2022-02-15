@@ -18,29 +18,25 @@ const person = module.exports = {
                 from: 'transactions',
                 localField: '_id',
                 foreignField: 'person_id',
-                as: 'transactions'
-            },
-            $lookup: {
-                from: 'groups',
+                as: 'transactions',
+            }},{
+                $lookup: {  
+                    from: 'groups',
                 localField: 'group_id',
                 foreignField: '_id',
                 as: 'groups'
+            } 
+        }, {
+            $unwind: '$groups' 
+        },{
+            $addFields: {
+                balance: { $sum: '$transactions.amount' },
+                groupName: '$groups.groupName'
             }
         }, {
-            $addFields: {
-                balance: {
-                    $sum: '$transactions.amount'
-                },
-                groupName: '$groups.groupName',
-            },
-           
-        },
-        {
-            $unwind: '$groups',
-        },
-         {
             $project: {
-                transactions: false
+                transactions: false, 
+                groups: false               
             }
         }]).toArray(function(err, data) {
             if(!err) 
