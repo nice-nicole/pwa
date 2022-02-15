@@ -29,7 +29,7 @@ const group = module.exports = {
         // let _id = env.urlParsed.query._id
         switch(env.req.method) {
             case 'GET':
-                group.sendData(env.res, _id)
+                group.sendData(env.res)
                 break
    
             case 'POST':

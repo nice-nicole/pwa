@@ -1,18 +1,12 @@
 <table class="table table-stripped">
     <tr>
-      <th>number</th>
+      <th>#</th>
       <th>Group name</th>
-      <!-- <th>Last name</th>
-      <th>Year of birth</th>
-      <th>Balance</th> -->
       <th></th>
     </tr>        
     <tr ng-repeat="group in ctrl.groups">
       <td><span class="badge" ng-bind="$index"></span></td>
       <td ng-bind="group.groupName"></td>
-      <!-- <td ng-bind="group.lastName"></td>
-      <td ng-bind="group.year"></td>
-      <td ng-bind="group.balance"></td> -->
       <td>
         <div ng-if="ctrl.isAdmin()">
           <button class="btn btn-danger btn-xs" ng-click="ctrl.delete(group._id)">del</button>
@@ -26,8 +20,6 @@
   <label for="edit_group_data">Edit group data</label>
   <form id="edit_group_data" class="form form-inline">
     <input class="form-control" type="text" placeholder="group name" ng-model="ctrl.group.groupName"/>
-    <!-- <input class="form-control" type="text" placeholder="last name" ng-model="ctrl.group.lastName"/>
-    <input class="form-control" type="number" placeholder="year" ng-model="ctrl.group.year"/> -->
     <button class="btn btn-default" ng-click="ctrl.new()" ng-disabled="!ctrl.isGroupDataCorrect()">New</button>
     <button class="btn btn-default" ng-click="ctrl.modify()" ng-if="ctrl.clickedRow >= 0" ng-disabled="!ctrl.isGroupDataCorrect()">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
   </form><br/>

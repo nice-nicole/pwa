@@ -67,7 +67,7 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
     }
 
     $scope.$on('change', function(event, arg) {
-        if(arg.collection == 'persons' || arg.collection == 'transactions' || arg.collection == 'groups') {
+        if(arg.collection == 'persons' || arg.collection == 'transactions') {
             refresh()
         }
     })
