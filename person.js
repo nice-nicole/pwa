@@ -4,7 +4,7 @@ const db = require('./db')
 const person = module.exports = {
   
     validate: function(person) {
-        let personFixed = { firstName: person.firstName, lastName: person.lastName, year: person.year }
+        let personFixed = { firstName: person.firstName, lastName: person.lastName, year: person.year, group_id: db.ObjectId(person.group_id) }
         if(personFixed.firstName && personFixed.lastName && personFixed.year >= 1500) {
             return personFixed
         } else {
@@ -22,20 +22,23 @@ const person = module.exports = {
             },
             $lookup: {
                 from: 'groups',
-                localField: '_id',
-                foreignField: 'person_id',
+                localField: 'group_id',
+                foreignField: '_id',
                 as: 'groups'
             }
         }, {
             $addFields: {
                 balance: {
                     $sum: '$transactions.amount'
-                }
+                },
+                groupName: '$groups.groupName',
             },
-            $addFields: {
-                group: '$groups.groupName',
-            }
-        }, {
+           
+        },
+        {
+            $unwind: '$groups',
+        },
+         {
             $project: {
                 transactions: false
             }

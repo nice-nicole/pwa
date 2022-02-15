@@ -9,11 +9,11 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
     ctrl.person = {
         firstName: '',
         lastName: '',
-        year: 2000
+        year: 2000,
+        group_id: ''
     }
 
     ctrl.amount = 0
-    ctrl.group = ''
     ctrl.from = ctrl.to = null
 
     ctrl.new = function() {
@@ -42,30 +42,28 @@ app.controller('PersonsCtrl', [ '$http', '$scope', 'lib', 'ws', function($http, 
     }
 
     ctrl.copy = function(n) {
-        ctrl.person.firstName = ctrl.persons[n].firstName
-        ctrl.person.lastName = ctrl.persons[n].lastName
-        ctrl.person.year = ctrl.persons[n].year
+        ctrl.person.firstName = ctrl.persons[n].firstName,
+        ctrl.person.lastName = ctrl.persons[n].lastName,
+        ctrl.person.year = ctrl.persons[n].year,
         ctrl.clickedRow = n
     }
 
     ctrl.isPersonDataCorrect = function() {
-        return ctrl.person.firstName && ctrl.person.lastName && ctrl.person.year >= 1500
+        return ctrl.person.personName
     }
 
     ctrl.isAdmin = function() {
         return lib.role == 'admin'
     }
-
     var refresh = function() {
-        // retrieve persons list on start
         $http.get('/person').then(function(res) {
             ctrl.persons = res.data
             ctrl.from = ctrl.to = ctrl.persons[0]._id
         }, function(err) {
             console.error(err.data)
         })
+    
     }
-
     $scope.$on('change', function(event, arg) {
         if(arg.collection == 'persons' || arg.collection == 'transactions') {
             refresh()

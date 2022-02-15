@@ -6,17 +6,20 @@ const example = module.exports = {
         "_id": db.ObjectId("618be4ba6b0df02e94319c15"),
         "firstName": "Johnny",
         "lastName": "Walker",
-        "year": 1969
+        "year": 1969,
+        "group_id": db.ObjectId("620be70d364c2614c55379d0")
     }, {
         "_id": db.ObjectId("618beab56b0df02e94319c18"),
         "firstName": "Jim",
         "lastName": "Beam",
-        "year": 1684
+        "year": 1684,
+        "group_id": db.ObjectId("620be70d364c2614c55379d0")
     }, {
         "_id": db.ObjectId("618bed4bdad4eb43c178c7b4"),
         "firstName": "Jack",
         "lastName": "Daniels",
-        "year": 1886
+        "year": 1886,
+        "group_id": db.ObjectId("620be70d364c2614c55379d0")
     }],
 
     users: [{
