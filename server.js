@@ -18,6 +18,7 @@ let example = require('./example')
 let auth = require('./auth')
 let security = require('./security')
 let group = require('./group')
+let chat = require('./chat')
 
 let httpServer = http.createServer()
 let fileServer = new nodestatic.Server('./frontend')
@@ -78,6 +79,9 @@ httpServer.on('request', function(req, res) {
                 break
             case '/history':
                 history.handle(env)
+                break
+            case '/chat':
+                chat.handle(env)
                 break
             default:
                 fileServer.serve(req, res)

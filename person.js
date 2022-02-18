@@ -21,7 +21,7 @@ const person = module.exports = {
                 as: 'transactions',
             }},{
                 $lookup: {  
-                    from: 'groups',
+                from: 'groups',
                 localField: 'group_id',
                 foreignField: '_id',
                 as: 'groups'

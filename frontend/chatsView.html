@@ -1,0 +1,39 @@
+<table class="table table-stripped">
+  <tr>
+    <th>nr</th>
+    <th>Sender</th>
+    <th>Group</th>
+    <th>Message</th>
+    <th>Date</th>
+    <th></th>
+  </tr>        
+  <tr ng-repeat="chat in ctrl.chats">
+    <td><span class="badge" ng-bind="$index"></span></td>
+    <td ng-bind="chat.firstName"></td>
+    <td ng-bind="chat.groupName"></td>
+    <td ng-bind="chat.contents"></td>
+    <td ng-bind="chat.when"></td>
+
+    <td>
+      <div ng-if="ctrl.isAdmin()">
+        <button class="btn btn-danger btn-xs" ng-click="ctrl.delete(chat._id)">del</button>
+        <button class="btn btn-primary btn-xs" ng-click="ctrl.copy($index)">copy</button>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<div ng-if="ctrl.isAdmin()">
+<label for="edit_chat_data">Edit Chat data</label>
+<form id="edit_chat_data" class="form form-inline">
+  <select class="form-control" ng-model="ctrl.chat.sender_id">
+    <option ng-repeat="person in ctrl.persons" value="{{person._id}}" ng-bind="person.firstName"></option>
+  </select>
+  <select class="form-control" ng-model="ctrl.chat.group_id">
+    <option ng-repeat="group in ctrl.groups" value="{{group._id}}" ng-bind="group.groupName"></option>
+  </select>
+  <input class="form-control" type="text" placeholder="Write a message" ng-model="ctrl.chat.contents"/>
+  <button class="btn btn-default" ng-click="ctrl.new()" ng-disabled="!ctrl.isChatDataCorrect()">New</button>
+  <button class="btn btn-default" ng-click="ctrl.modify()" ng-if="ctrl.clickedRow >= 0" ng-disabled="!ctrl.isChatDataCorrect()">Modify <span class="badge" ng-bind="ctrl.clickedRow"></span></button>
+</form><br/>
+</div>

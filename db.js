@@ -8,6 +8,7 @@ const db = module.exports = {
     transactions: null,
     users: null,
     groups: null,
+    chats: null,
 
     ObjectId: function(_idStr) {
         try {
@@ -28,6 +29,7 @@ const db = module.exports = {
             db.transactions = conn.collection('transactions')
             db.users = conn.collection('users')
             db.groups = conn.collection('groups')
+            db.chats = conn.collection('chats')
             nextTick()
         })
     }

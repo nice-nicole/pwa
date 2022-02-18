@@ -11,7 +11,8 @@ app.constant('routes', [
 	{ route: '/persons', templateUrl: 'personsView.html', controller: 'PersonsCtrl', controllerAs: 'ctrl', menu: 'Persons', roles: ['admin', 'user'] },
     { route: '/groups', templateUrl: 'groupsView.html', controller: 'GroupsCtrl', controllerAs: 'ctrl', menu: 'Groups', roles: ['admin'] },
     { route: '/transfers', templateUrl: 'transfersView.html', controller: 'TransfersCtrl', controllerAs: 'ctrl', menu: 'Transfers', roles: ['admin', 'user'] },
-    { route: '/history', templateUrl: 'historyView.html', controller: 'HistoryCtrl', controllerAs: 'ctrl', menu: 'History', roles: ['admin'] }
+    { route: '/history', templateUrl: 'historyView.html', controller: 'HistoryCtrl', controllerAs: 'ctrl', menu: 'History', roles: ['admin'] },
+    { route: '/chat', templateUrl: 'chatsView.html', controller: 'ChatsCtrl', controllerAs: 'ctrl', menu: 'Chats', roles: ['admin', 'user'] },
 ])
 
 // router installation
